@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell($names = @\\('House','Home','Check','Code','Trophy','ListTodo','FileText','Timer','Target','Users','Bell','X','Plus','Pencil','Trash2','Calendar','Menu','LogOut','Settings','User','ExternalLink','Search','TriangleAlert','AlertTriangle','Clock','ChevronLeft','ChevronRight','ChevronDown','Pin','Flame','Inbox','Send','Lock','Copy','Sparkles','Command','Zap','TrendingUp','Play','Pause','RotateCcw','MessageSquare','LayoutDashboard','PanelLeftClose','PanelLeft','StickyNote','CircleCheck','ArrowRight','ChevronsLeft'\\); $dts = Get-Content 'D:\\\\Pulse\\\\node_modules\\\\lucide-react\\\\dist\\\\lucide-react.d.ts' -Raw; $missing = @\\(\\); foreach \\($n in $names\\) { $pattern = '\\(declare const |as \\){0}\\(:|,|;|\\\\s\\)' -f [regex]::Escape\\($n\\); if \\($dts -notmatch $pattern\\) { $missing += $n } }; Write-Output \\(\"MISSING: \" + \\($missing -join ', '\\)\\); Write-Output \\(\"total checked: \" + $names.Count\\))",
+      "Bash(git add *)",
+      "Bash(gh auth *)",
+      "Bash(git config *)",
+      "Bash(echo \"local name: [$\\(git config user.name\\)]\")",
+      "Bash(echo \"local email: [$\\(git config user.email\\)]\")",
+      "Bash(echo \"global name: [$\\(git config --global user.name\\)]\")",
+      "Bash(echo \"global email: [$\\(git config --global user.email\\)]\")"
+    ]
+  }
+}

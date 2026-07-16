@@ -1,0 +1,13 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Hackathon cover images: everyone signed-in can view, only admins upload.
+    match /hackathons/{hackathonId}/{fileName} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null
+        && firestore.get(/databases/(default)/documents/users/$(request.auth.uid)).data.role == 'admin'
+        && request.resource.size < 5 * 1024 * 1024
+        && request.resource.contentType.matches('image/.*');
+    }
+  }
+}

@@ -1,0 +1,91 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return signedIn()
+        && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+
+    // ── User profiles + all per-user data ──
+    match /users/{userId} {
+      allow read, write: if signedIn() && request.auth.uid == userId;
+      // Users must not grant themselves admin, except the hardcoded owner
+      // account which is auto-promoted to admin on first login/signup.
+      allow update: if signedIn() && request.auth.uid == userId
+        && (!('role' in request.resource.data)
+            || request.resource.data.role == resource.data.role
+            || (request.resource.data.role == 'admin'
+                && request.auth.token.email == 'pnarendhiran6@gmail.com'));
+
+      match /{subcollection}/{docId} {
+        allow read, write: if signedIn() && request.auth.uid == userId;
+      }
+      match /subjects/{subjectId}/sessions/{sessionId} {
+        allow read, write: if signedIn() && request.auth.uid == userId;
+      }
+    }
+
+    // ── Global challenge bank: read for all signed-in users, write for admins ──
+    match /challenges/{challengeId} {
+      allow read: if signedIn();
+      allow write: if isAdmin();
+    }
+
+    // ── Hackathons: read for all signed-in users, write for admins ──
+    match /hackathons/{hackathonId} {
+      allow read: if signedIn();
+      allow create, update, delete: if isAdmin();
+
+      match /interested/{userId} {
+        allow read: if signedIn();
+        allow write: if signedIn() && request.auth.uid == userId;
+      }
+    }
+
+    // ── Study groups ──
+    match /groups/{groupId} {
+      function isMember() {
+        return signedIn() && request.auth.uid in resource.data.memberIds;
+      }
+      function isOwner() {
+        return signedIn() && request.auth.uid == resource.data.ownerId;
+      }
+
+      // Public groups are discoverable; private groups readable by members.
+      // (Join-by-code queries filter on joinCode, which requires read access —
+      // list is allowed for signed-in users; lock down further if needed.)
+      allow read: if signedIn();
+      allow create: if signedIn()
+        && request.resource.data.ownerId == request.auth.uid
+        && request.resource.data.memberIds == [request.auth.uid];
+      // Members may update membership (join/leave); owner may update anything.
+      allow update: if isOwner()
+        || (signedIn()
+            && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['memberIds']));
+      allow delete: if isOwner();
+
+      match /messages/{messageId} {
+        function parentGroup() {
+          return get(/databases/$(database)/documents/groups/$(groupId)).data;
+        }
+        allow read: if signedIn() && request.auth.uid in parentGroup().memberIds;
+        allow create: if signedIn()
+          && request.auth.uid in parentGroup().memberIds
+          && request.resource.data.senderId == request.auth.uid
+          && request.resource.data.text is string
+          && request.resource.data.text.size() > 0
+          && request.resource.data.text.size() <= 2000;
+        // Owner can pin/unpin or moderate; senders can delete their own.
+        allow update: if signedIn() && request.auth.uid == parentGroup().ownerId;
+        allow delete: if signedIn()
+          && (request.auth.uid == resource.data.senderId
+              || request.auth.uid == parentGroup().ownerId);
+      }
+    }
+  }
+}
