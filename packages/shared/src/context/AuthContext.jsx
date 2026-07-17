@@ -15,8 +15,8 @@ import { auth, db, googleProvider } from '../config/firebase'
 
 const AuthContext = createContext(null)
 
-// Owner account — always granted admin rights (hackathon posting, etc.).
-const ADMIN_EMAILS = ['pnarendhiran6@gmail.com']
+// Owner accounts — always granted admin rights (hackathon posting, etc.).
+const ADMIN_EMAILS = ['pnarendhiran6@gmail.com', 'lakshmidhar2007@gmail.com']
 
 const FRIENDLY_ERRORS = {
   'auth/invalid-email': 'That email address looks invalid.',

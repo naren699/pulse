@@ -15,12 +15,12 @@ service cloud.firestore {
     match /users/{userId} {
       allow read, write: if signedIn() && request.auth.uid == userId;
       // Users must not grant themselves admin, except the hardcoded owner
-      // account which is auto-promoted to admin on first login/signup.
+      // accounts which are auto-promoted to admin on first login/signup.
       allow update: if signedIn() && request.auth.uid == userId
         && (!('role' in request.resource.data)
             || request.resource.data.role == resource.data.role
             || (request.resource.data.role == 'admin'
-                && request.auth.token.email == 'pnarendhiran6@gmail.com'));
+                && request.auth.token.email in ['pnarendhiran6@gmail.com', 'lakshmidhar2007@gmail.com']));
 
       match /{subcollection}/{docId} {
         allow read, write: if signedIn() && request.auth.uid == userId;
