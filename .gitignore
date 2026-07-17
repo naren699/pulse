@@ -12,6 +12,15 @@ dist
 dist-ssr
 *.local
 
+# Expo / React Native
+.expo
+.expo-shared
+packages/mobile/android
+packages/mobile/ios
+*.jks
+*.p12
+*.keystore
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

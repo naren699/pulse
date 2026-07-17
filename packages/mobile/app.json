@@ -1,0 +1,41 @@
+{
+  "expo": {
+    "name": "PULSE",
+    "slug": "pulse",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "dark",
+    "scheme": "pulse",
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.pulseapp.mobile"
+    },
+    "android": {
+      "package": "com.pulseapp.mobile",
+      "adaptiveIcon": {
+        "backgroundColor": "#E6F4FE",
+        "foregroundImage": "./assets/android-icon-foreground.png",
+        "backgroundImage": "./assets/android-icon-background.png",
+        "monochromeImage": "./assets/android-icon-monochrome.png"
+      }
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "firebase": {
+        "apiKey": "AIzaSyBrJNCB2LC_YXrDVdC0SBwb2TUrD4pd7fU",
+        "authDomain": "pulse-b96b5.firebaseapp.com",
+        "projectId": "pulse-b96b5",
+        "storageBucket": "pulse-b96b5.firebasestorage.app",
+        "messagingSenderId": "385571374022",
+        "appId": "1:385571374022:web:d08195ed616a403d50a8c7"
+      },
+      "googleAuth": {},
+      "eas": {
+        "projectId": "99ea57ee-37e6-44f2-a453-58ddc46c6171"
+      }
+    }
+  }
+}

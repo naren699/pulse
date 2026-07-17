@@ -14,7 +14,10 @@
       "Bash(git remote *)",
       "Bash(git push *)",
       "Bash(git commit -m ' *)",
-      "Bash(git commit *)"
+      "Bash(git commit *)",
+      "Bash(tasklist)",
+      "Bash(node -p \"require\\('./node_modules/react/package.json'\\).version\")",
+      "Bash(node -p \"require\\('./node_modules/react-dom/package.json'\\).version\")"
     ]
   }
 }
